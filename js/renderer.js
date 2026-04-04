@@ -40,20 +40,22 @@ Tetris.Renderer = (function() {
     const scorePanel = document.querySelector('.score-panel');
     const touchControls = document.querySelector('.touch-controls');
 
-    // Measure actual heights of surrounding elements
-    let usedHeight = 40; // padding + margins buffer
-    if (header) usedHeight += header.offsetHeight;
-    if (isMobile && scorePanel) usedHeight += scorePanel.offsetHeight;
-    if (touchControls) usedHeight += touchControls.offsetHeight;
-
     // Use visualViewport for accurate mobile measurement
     const viewportHeight = window.visualViewport
       ? window.visualViewport.height
       : window.innerHeight;
 
+    // Measure actual heights of surrounding elements
+    let usedHeight = 40; // padding + margins buffer
+    if (header) usedHeight += header.offsetHeight;
+    if (touchControls) usedHeight += touchControls.offsetHeight;
+
     const maxHeight = viewportHeight - usedHeight;
+
+    // On mobile, score panel is beside the board — subtract its width
+    const scorePanelWidth = isMobile && scorePanel ? scorePanel.offsetWidth + 12 : 0;
     const maxWidth = isMobile
-      ? window.innerWidth - 24
+      ? window.innerWidth - scorePanelWidth - 24
       : (window.innerWidth - 260) * 0.6;
 
     const ratioW = maxWidth / C.BOARD_WIDTH;
