@@ -26,22 +26,40 @@ Tetris.Renderer = (function() {
 
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', resizeCanvas);
+    }
   }
 
   /**
    * Resize canvas to fit viewport while maintaining aspect ratio
    */
   function resizeCanvas() {
-    const hasTouchControls = document.querySelector('.touch-controls') !== null;
-    const maxHeight = window.innerHeight - (hasTouchControls ? 200 : 120);
-    const maxWidth = window.innerWidth < 768
-      ? window.innerWidth - 40
+    const isMobile = window.innerWidth < 768;
+    const header = document.querySelector('.game-header');
+    const scorePanel = document.querySelector('.score-panel');
+    const touchControls = document.querySelector('.touch-controls');
+
+    // Measure actual heights of surrounding elements
+    let usedHeight = 40; // padding + margins buffer
+    if (header) usedHeight += header.offsetHeight;
+    if (isMobile && scorePanel) usedHeight += scorePanel.offsetHeight;
+    if (touchControls) usedHeight += touchControls.offsetHeight;
+
+    // Use visualViewport for accurate mobile measurement
+    const viewportHeight = window.visualViewport
+      ? window.visualViewport.height
+      : window.innerHeight;
+
+    const maxHeight = viewportHeight - usedHeight;
+    const maxWidth = isMobile
+      ? window.innerWidth - 24
       : (window.innerWidth - 260) * 0.6;
 
     const ratioW = maxWidth / C.BOARD_WIDTH;
     const ratioH = maxHeight / C.VISIBLE_HEIGHT;
     cellSize = Math.floor(Math.min(ratioW, ratioH, C.CELL_SIZE));
-    cellSize = Math.max(cellSize, 16); // minimum size
+    cellSize = Math.max(cellSize, 14); // minimum size
 
     canvas.width = C.BOARD_WIDTH * cellSize;
     canvas.height = C.VISIBLE_HEIGHT * cellSize;

@@ -74,12 +74,14 @@ Tetris.Touch = (function() {
 
     container.appendChild(leftGroup);
     container.appendChild(rightGroup);
-    document.body.appendChild(container);
 
-    // Signal CSS that touch controls are present
+    // Insert inside game-container so controls participate in flex layout
     const gameContainer = document.querySelector('.game-container');
     if (gameContainer) {
+      gameContainer.appendChild(container);
       gameContainer.classList.add('has-touch-controls');
+    } else {
+      document.body.appendChild(container);
     }
   }
 
