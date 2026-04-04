@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ТЕТРИС - Soviet Tetris</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="game-container">
+    <!-- Header -->
+    <div class="game-header">
+      <div class="game-header__title">
+        <span class="game-header__star star-pulse">★</span>
+        TETRIS
+        <span class="game-header__star star-pulse">★</span>
+      </div>
+    </div>
+
+    <!-- Main Game Area -->
+    <div class="game-main">
+      <!-- Left Decoration Panel -->
+      <div class="deco-panel deco-panel--left">
+        <canvas id="deco-left" width="160" height="600"></canvas>
+      </div>
+
+      <!-- Playfield -->
+      <div class="playfield-wrapper">
+        <canvas id="game-canvas" width="300" height="600"></canvas>
+        <div class="scanline-overlay"></div>
+
+        <!-- Title Screen Overlay -->
+        <div id="title-overlay" class="overlay overlay--title">
+          <div class="star-row star-pulse">★ ★ ★ ★ ★</div>
+          <br>
+          <div class="overlay__title">TETRIS</div>
+          <div class="overlay__subtitle">SOVIET EDITION</div>
+          <hr class="score-panel__divider" style="width: 60%; border-color: var(--color-border);">
+          <br>
+          <div class="overlay__level-select">
+            LEVEL: ◄ <span id="start-level" class="overlay__level-value">0</span> ►
+          </div>
+          <div class="overlay__prompt">PRESS ENTER</div>
+          <br>
+          <div class="overlay__song-hint" style="font-size: 0.6rem; color: var(--color-border);">
+            N - CHANGE SONG
+          </div>
+          <br>
+          <div class="star-row star-pulse">★ ★ ★ ★ ★</div>
+        </div>
+
+        <!-- Pause Overlay -->
+        <div id="pause-overlay" class="overlay overlay--pause hidden">
+          <div class="overlay__title" style="color: var(--color-text-bright);">PAUSED</div>
+          <br>
+          <div class="overlay__prompt">P - RESUME</div>
+        </div>
+
+        <!-- Game Over Overlay -->
+        <div id="gameover-overlay" class="overlay overlay--gameover hidden">
+          <div class="overlay__title" style="color: var(--color-text-bright);">GAME OVER</div>
+          <br>
+          <div class="overlay__score">SCORE: <span id="final-score">0</span></div>
+          <div class="overlay__prompt">ENTER - NEW GAME</div>
+        </div>
+      </div>
+
+      <!-- Score Panel -->
+      <div class="score-panel">
+        <div class="score-panel__section">
+          <div class="star-row">★</div>
+          <div class="score-panel__label">SCORE</div>
+          <div class="score-panel__value" id="score-display">0000000</div>
+        </div>
+        <hr class="score-panel__divider">
+        <div class="score-panel__section">
+          <div class="score-panel__label">LEVEL</div>
+          <div class="score-panel__value" id="level-display">00</div>
+        </div>
+        <hr class="score-panel__divider">
+        <div class="score-panel__section">
+          <div class="score-panel__label">LINES</div>
+          <div class="score-panel__value" id="lines-display">000</div>
+        </div>
+        <hr class="score-panel__divider">
+        <div class="score-panel__section">
+          <div class="next-piece__label">NEXT</div>
+          <div class="next-piece__canvas-wrapper">
+            <canvas id="next-canvas" width="120" height="120"></canvas>
+          </div>
+        </div>
+        <hr class="score-panel__divider">
+        <div class="score-panel__section">
+          <div class="score-panel__label">SONG</div>
+          <div class="score-panel__value score-panel__value--song" id="song-display">KOROBEINIKI</div>
+        </div>
+        <hr class="score-panel__divider">
+        <div class="star-row">★ ★ ★</div>
+        <div class="score-panel__controls">
+          M - SOUND<br>
+          N - SONG<br>
+          P - PAUSE<br>
+          ←→ - MOVE<br>
+          ↑ - ROTATE<br>
+          SPACE - DROP
+        </div>
+      </div>
+
+      <!-- Right Decoration Panel -->
+      <div class="deco-panel deco-panel--right">
+        <canvas id="deco-right" width="160" height="600"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts in load order -->
+  <script src="js/constants.js"></script>
+  <script src="js/sound.js"></script>
+  <script src="js/pieces.js"></script>
+  <script src="js/board.js"></script>
+  <script src="js/scoring.js"></script>
+  <script src="js/decorations.js"></script>
+  <script src="js/renderer.js"></script>
+  <script src="js/input.js"></script>
+  <script src="js/touch.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>

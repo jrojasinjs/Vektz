@@ -1,0 +1,433 @@
+/* Soviet Tetris - Style Sheet */
+
+:root {
+  /* Primary Soviet palette */
+  --color-bg:           #1a1a0e;
+  --color-bg-panel:     #2a2a1e;
+  --color-border:       #8b7355;
+  --color-border-light: #c4a668;
+  --color-text:         #c4a668;
+  --color-text-bright:  #e8d5a3;
+  --color-red:          #cc3333;
+  --color-red-dark:     #8b1a1a;
+  --color-star:         #cc3333;
+
+  /* UI colors */
+  --color-grid-line:    #2a2a1e;
+  --color-ghost:        rgba(200, 200, 200, 0.2);
+  --color-ghost-border: rgba(200, 200, 200, 0.5);
+}
+
+/* Reset & Base */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: 'Courier New', Courier, 'Lucida Console', monospace;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* Main Layout */
+.game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 10px;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 19px,
+      rgba(200, 180, 120, 0.03) 19px,
+      rgba(200, 180, 120, 0.03) 20px
+    );
+}
+
+/* Title Bar */
+.game-header {
+  text-align: center;
+  padding: 8px 0;
+  margin-bottom: 8px;
+}
+
+.game-header__title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--color-red);
+  text-shadow: 0 0 20px rgba(204, 51, 51, 0.5);
+}
+
+.game-header__star {
+  color: var(--color-star);
+  font-size: 1.2rem;
+}
+
+/* Main Game Area */
+.game-main {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+/* Playfield Wrapper */
+.playfield-wrapper {
+  position: relative;
+  border: 3px solid var(--color-red);
+  padding: 2px;
+  background: var(--color-bg);
+}
+
+.playfield-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  border: 1px solid var(--color-border);
+  pointer-events: none;
+}
+
+#game-canvas {
+  display: block;
+  background: var(--color-bg);
+}
+
+/* CRT scanline overlay */
+.scanline-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 2px,
+    rgba(0, 0, 0, 0.08) 2px,
+    rgba(0, 0, 0, 0.08) 4px
+  );
+}
+
+/* Decoration Panels */
+.deco-panel {
+  display: none;
+}
+
+.deco-panel canvas {
+  display: block;
+  border: 2px solid var(--color-border);
+}
+
+/* Score Panel */
+.score-panel {
+  background: var(--color-bg-panel);
+  border: 2px solid var(--color-border);
+  padding: 16px;
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.score-panel__section {
+  text-align: center;
+}
+
+.score-panel__label {
+  font-size: 0.75rem;
+  color: var(--color-text);
+  margin-bottom: 4px;
+}
+
+.score-panel__value {
+  font-size: 1.2rem;
+  color: var(--color-text-bright);
+  font-weight: bold;
+}
+
+.score-panel__value--song {
+  font-size: 0.7rem;
+  color: var(--color-red);
+  letter-spacing: 1px;
+}
+
+.score-panel__divider {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 4px 0;
+}
+
+/* Next Piece Preview */
+.next-piece__label {
+  font-size: 0.75rem;
+  color: var(--color-text);
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.next-piece__canvas-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+#next-canvas {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+}
+
+/* Controls hint */
+.score-panel__controls {
+  font-size: 0.6rem;
+  color: var(--color-border);
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* Star decoration */
+.star-row {
+  text-align: center;
+  color: var(--color-star);
+  font-size: 0.9rem;
+  letter-spacing: 6px;
+}
+
+/* Title Screen Overlay */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.overlay--title {
+  background: var(--color-bg);
+}
+
+.overlay--pause {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.overlay--gameover {
+  background: rgba(139, 26, 26, 0.8);
+}
+
+.overlay__title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--color-red);
+  text-shadow: 0 0 20px rgba(204, 51, 51, 0.5);
+  margin-bottom: 4px;
+}
+
+.overlay__subtitle {
+  font-size: 1rem;
+  color: var(--color-text);
+  margin-bottom: 24px;
+}
+
+.overlay__text {
+  font-size: 1rem;
+  color: var(--color-text-bright);
+  margin-bottom: 8px;
+}
+
+.overlay__prompt {
+  font-size: 0.85rem;
+  color: var(--color-text);
+  animation: blink 1s step-end infinite;
+}
+
+.overlay__level-select {
+  font-size: 1rem;
+  color: var(--color-text-bright);
+  margin-bottom: 20px;
+}
+
+.overlay__level-value {
+  color: var(--color-red);
+  font-size: 1.3rem;
+  font-weight: bold;
+  min-width: 2ch;
+  display: inline-block;
+  text-align: center;
+}
+
+.overlay__score {
+  font-size: 1.3rem;
+  color: var(--color-text-bright);
+  margin-bottom: 16px;
+}
+
+/* Blink animation */
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+/* Star pulse animation */
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.star-pulse {
+  display: inline-block;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Hide elements by state */
+.hidden {
+  display: none !important;
+}
+
+/* Responsive: Mobile */
+@media (max-width: 767px) {
+  .game-main {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .score-panel {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    min-width: auto;
+    width: 100%;
+    max-width: 400px;
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .score-panel__section {
+    flex: 1;
+    min-width: 80px;
+  }
+
+  .score-panel__divider {
+    display: none;
+  }
+
+  .score-panel__controls {
+    display: none;
+  }
+
+  .game-header__title {
+    font-size: 1.3rem;
+  }
+
+  .overlay__title {
+    font-size: 1.8rem;
+  }
+}
+
+/* Responsive: Large screens */
+@media (min-width: 1200px) {
+  .game-header__title {
+    font-size: 2.2rem;
+  }
+
+  .score-panel {
+    min-width: 200px;
+  }
+
+  .deco-panel {
+    display: block;
+  }
+}
+
+/* ===== Touch Controls ===== */
+.touch-controls {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 10px 12px 16px;
+  z-index: 100;
+  pointer-events: none;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.touch-controls__group {
+  display: flex;
+  gap: 8px;
+  pointer-events: auto;
+}
+
+.touch-controls__group--left {
+  align-items: center;
+}
+
+.touch-controls__group--right {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  max-width: 160px;
+}
+
+.touch-controls__btn {
+  min-width: 56px;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  border-radius: 10px;
+  background: rgba(139, 115, 85, 0.35);
+  border: 1.5px solid var(--color-border);
+  color: var(--color-text-bright);
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: background 0.05s;
+}
+
+.touch-controls__btn--primary {
+  min-width: 68px;
+  min-height: 68px;
+  font-size: 2rem;
+  background: rgba(139, 115, 85, 0.5);
+  border-width: 2px;
+}
+
+.touch-controls__btn:active,
+.touch-controls__btn--pressed {
+  background: rgba(200, 170, 110, 0.6);
+  border-color: var(--color-text-bright);
+}
+
+/* Hide touch controls on mouse/desktop devices */
+@media (hover: hover) and (pointer: fine) {
+  .touch-controls {
+    display: none;
+  }
+}
+
+/* Extra bottom space on mobile for touch controls */
+@media (max-width: 767px) {
+  .game-container.has-touch-controls {
+    padding-bottom: 100px;
+  }
+}
