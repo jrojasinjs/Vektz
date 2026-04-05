@@ -1,7 +1,8 @@
 # CLAUDE.md - Project Instructions for Claude Code
 
 ## Project Overview
-Soviet-style Tetris game built as a single-page HTML application. Inspired by the original 1984 Electronika 60 and 1986 IBM PC Tetris aesthetic. No frameworks, no build tools, no external dependencies. **Mobile-first**: the primary target is smartphones via touch controls.
+Soviet-style Tetris game built as a single-page HTML application. Inspired by the original 1984 Electronika 60 and 1986 IBM PC Tetris aesthetic. No frameworks, no build tools, no external dependencies. 
+**Mobile-first**: the primary target is smartphones via touch controls.
 
 ## Tech Stack
 - **HTML5** - Single `index.html` entry point

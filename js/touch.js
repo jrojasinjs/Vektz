@@ -4,7 +4,6 @@ Tetris.Touch = (function() {
   const C = Tetris.Constants;
 
   let actionCallback = null;
-  let isTouchDevice = false;
 
   // Touch button state tracking
   const active = {};
@@ -12,16 +11,20 @@ Tetris.Touch = (function() {
   const arrTimers = {};
 
   // Actions that support DAS/ARR (hold to repeat)
-  const DAS_ACTIONS = ['moveLeft', 'moveRight', 'softDrop'];
+  const DAS_ACTIONS = ['moveLeft', 'moveRight'];
 
-  // Button definitions: [action, label, group]
+  // Button definitions: [action, label, group, slot]
+  // slot positions within a 2x2 grid per side: tl, tr, bl, br
+  // Using solid-fill glyphs for maximum clarity at small sizes
   const BUTTONS = [
-    ['moveLeft',  '\u25C0', 'left'],
-    ['softDrop',  '\u25BC', 'left'],
-    ['moveRight', '\u25B6', 'left'],
-    ['rotateCCW', '\u21BA', 'right'],
-    ['rotateCW',  '\u21BB', 'right'],
-    ['hardDrop',  '\u2B07', 'right']
+    ['hardDrop',  '\u2BEF',  'left',  'tl'], // ⯯
+    ['pause',     '\u23F8',  'left',  'tr'], // ⏸
+    ['moveLeft',  '\u25C0',  'left',  'bl'], // ◀
+    ['rotateCCW', '\u21BA',  'left',  'br'], // ↺
+    ['pause',     '\u23F8',  'right', 'tl'], // ⏸
+    ['hardDrop',  '\u2BEF',  'right', 'tr'], // ⯯
+    ['rotateCW',  '\u21BB',  'right', 'bl'], // ↻
+    ['moveRight', '\u25B6',  'right', 'br']  // ▶
   ];
 
   /**
@@ -30,10 +33,6 @@ Tetris.Touch = (function() {
    */
   function init(callback) {
     actionCallback = callback;
-    isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-
-    if (!isTouchDevice) return;
-
     createControls();
     bindOverlayTaps();
     preventDefaults();
@@ -52,18 +51,25 @@ Tetris.Touch = (function() {
     const rightGroup = document.createElement('div');
     rightGroup.className = 'touch-controls__group touch-controls__group--right';
 
-    for (const [action, label, group] of BUTTONS) {
+    // Central LCD display panel (decorative, matches reference image)
+    const lcd = document.createElement('div');
+    lcd.className = 'touch-controls__lcd';
+    lcd.innerHTML = '<div class="touch-controls__lcd-screen"></div>';
+
+    for (const [action, label, group, slot] of BUTTONS) {
       const btn = document.createElement('div');
-      btn.className = 'touch-controls__btn';
-      if (action === 'rotateCW') {
-        btn.classList.add('touch-controls__btn--primary');
-      }
+      btn.className = 'touch-controls__btn touch-controls__btn--' + slot;
       btn.setAttribute('data-action', action);
       btn.textContent = label;
 
       btn.addEventListener('touchstart', onTouchStart, { passive: false });
       btn.addEventListener('touchend', onTouchEnd, { passive: false });
       btn.addEventListener('touchcancel', onTouchEnd, { passive: false });
+      // Mouse support for desktop preview / click-to-play
+      btn.addEventListener('mousedown', onTouchStart);
+      btn.addEventListener('mouseup', onTouchEnd);
+      btn.addEventListener('mouseleave', onTouchEnd);
+      btn.addEventListener('contextmenu', function(e) { e.preventDefault(); });
 
       if (group === 'left') {
         leftGroup.appendChild(btn);
@@ -73,6 +79,7 @@ Tetris.Touch = (function() {
     }
 
     container.appendChild(leftGroup);
+    container.appendChild(lcd);
     container.appendChild(rightGroup);
 
     // Insert inside game-container so controls participate in flex layout
@@ -176,8 +183,6 @@ Tetris.Touch = (function() {
    * @param {number} deltaTime - Time since last frame in ms
    */
   function update(deltaTime) {
-    if (!isTouchDevice) return;
-
     for (const action of DAS_ACTIONS) {
       if (!active[action]) continue;
 

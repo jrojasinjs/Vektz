@@ -2,21 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>ТЕТРИС - Soviet Tetris</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <div class="game-container">
-    <!-- Header -->
-    <div class="game-header">
-      <div class="game-header__title">
-        <span class="game-header__star star-pulse">★</span>
-        TETRIS
-        <span class="game-header__star star-pulse">★</span>
-      </div>
-    </div>
-
     <!-- Main Game Area -->
     <div class="game-main">
       <!-- Left Decoration Panel -->
@@ -40,11 +31,7 @@
           <div class="overlay__level-select">
             LEVEL: ◄ <span id="start-level" class="overlay__level-value">0</span> ►
           </div>
-          <div class="overlay__prompt">PRESS ENTER</div>
-          <br>
-          <div class="overlay__song-hint" style="font-size: 0.6rem; color: var(--color-border);">
-            N - CHANGE SONG
-          </div>
+          <div class="overlay__prompt">TAP TO START</div>
           <br>
           <div class="star-row star-pulse">★ ★ ★ ★ ★</div>
         </div>
@@ -66,45 +53,61 @@
       </div>
 
       <!-- Score Panel -->
-      <div class="score-panel">
+      <aside class="score-panel">
+        <div class="score-panel__brand">Tetris</div>
+
         <div class="score-panel__section">
-          <div class="star-row">★</div>
-          <div class="score-panel__label">SCORE</div>
-          <div class="score-panel__value" id="score-display">0000000</div>
+          <div class="score-panel__label">
+            <span class="score-panel__label-ru">ОЧКИ</span>
+            <span class="score-panel__label-sep">/</span>
+            <span class="score-panel__label-en">SCORE</span>
+          </div>
+          <div class="score-panel__value digital" id="score-display">0000000</div>
         </div>
-        <hr class="score-panel__divider">
+
         <div class="score-panel__section">
-          <div class="score-panel__label">LEVEL</div>
-          <div class="score-panel__value" id="level-display">00</div>
+          <div class="score-panel__label">
+            <span class="score-panel__label-ru">УРОВЕНЬ</span>
+            <span class="score-panel__label-sep">/</span>
+            <span class="score-panel__label-en">LEVEL</span>
+          </div>
+          <div class="score-panel__value digital" id="level-display">00</div>
         </div>
-        <hr class="score-panel__divider">
+
         <div class="score-panel__section">
-          <div class="score-panel__label">LINES</div>
-          <div class="score-panel__value" id="lines-display">000</div>
+          <div class="score-panel__label">
+            <span class="score-panel__label-ru">ЛИНИИ</span>
+            <span class="score-panel__label-sep">/</span>
+            <span class="score-panel__label-en">LINES</span>
+          </div>
+          <div class="score-panel__value digital" id="lines-display">000</div>
         </div>
-        <hr class="score-panel__divider">
+
         <div class="score-panel__section">
-          <div class="next-piece__label">NEXT</div>
+          <div class="score-panel__label">
+            <span class="score-panel__label-ru">СЛЕДУЮЩАЯ</span>
+            <span class="score-panel__label-sep">/</span>
+            <span class="score-panel__label-en">NEXT</span>
+          </div>
           <div class="next-piece__canvas-wrapper">
             <canvas id="next-canvas" width="120" height="120"></canvas>
           </div>
         </div>
-        <hr class="score-panel__divider">
+
         <div class="score-panel__section">
-          <div class="score-panel__label">SONG</div>
-          <div class="score-panel__value score-panel__value--song" id="song-display">KOROBEINIKI</div>
+          <div class="score-panel__label">
+            <span class="score-panel__label-ru">ПЕСНЯ</span>
+            <span class="score-panel__label-sep">/</span>
+            <span class="score-panel__label-en">SONG</span>
+          </div>
+          <div class="score-panel__value score-panel__value--song" id="song-display">КОРОБЕЙНИКИ</div>
         </div>
-        <hr class="score-panel__divider">
-        <div class="star-row">★ ★ ★</div>
+
         <div class="score-panel__controls">
-          M - SOUND<br>
-          N - SONG<br>
-          P - PAUSE<br>
-          ←→ - MOVE<br>
-          ↑ - ROTATE<br>
-          SPACE - DROP
+          M - SOUND &nbsp; N - SONG &nbsp; P - PAUSE<br>
+          ←→ MOVE &nbsp; ↑ ROTATE &nbsp; SPACE DROP
         </div>
-      </div>
+      </aside>
 
       <!-- Right Decoration Panel -->
       <div class="deco-panel deco-panel--right">

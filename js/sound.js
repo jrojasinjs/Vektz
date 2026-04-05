@@ -928,42 +928,80 @@ Tetris.Sound = (function() {
     musicTimerId = setTimeout(scheduleMusicAhead, 500);
   }
 
+  // ─── MP3 playlist (cyclic with 5s silence between tracks) ───
+  const PLAYLIST = [
+    { name: 'KOROBEINIKI', src: 'assets/music/01-korobeinsky.mp3' },
+    { name: 'KATYUSHA',    src: 'assets/music/02-katyusha.mp3' },
+    { name: 'KALINKA',     src: 'assets/music/03-kalinka.mp3' }
+  ];
+  const SILENCE_MS = 5000;
+
+  let audioEl = null;
+  let silenceTimerId = null;
+  let playlistIndex = 0;
+
+  function ensureAudioEl() {
+    if (audioEl) return audioEl;
+    audioEl = new Audio();
+    audioEl.preload = 'auto';
+    audioEl.volume = 0.5;
+    audioEl.addEventListener('ended', onTrackEnded);
+    audioEl.addEventListener('error', onTrackEnded);
+    return audioEl;
+  }
+
+  function onTrackEnded() {
+    if (!musicPlaying) return;
+    if (silenceTimerId) clearTimeout(silenceTimerId);
+    silenceTimerId = setTimeout(function() {
+      silenceTimerId = null;
+      if (!musicPlaying) return;
+      playlistIndex = (playlistIndex + 1) % PLAYLIST.length;
+      playCurrentTrack();
+    }, SILENCE_MS);
+  }
+
+  function playCurrentTrack() {
+    if (!musicPlaying) return;
+    const el = ensureAudioEl();
+    el.src = PLAYLIST[playlistIndex].src;
+    const p = el.play();
+    if (p && typeof p.catch === 'function') {
+      p.catch(function() { /* autoplay blocked / ignore */ });
+    }
+  }
+
   function startMusic() {
-    if (!initialized || !audioCtx || musicPlaying) return;
+    if (musicPlaying || !enabled) return;
     musicPlaying = true;
-    musicScheduledUntil = audioCtx.currentTime + 0.1;
-    scheduleMusicAhead();
+    playCurrentTrack();
   }
 
   function stopMusic() {
     musicPlaying = false;
-    if (musicTimerId) {
-      clearTimeout(musicTimerId);
-      musicTimerId = null;
+    if (silenceTimerId) {
+      clearTimeout(silenceTimerId);
+      silenceTimerId = null;
     }
-    // Kill delay tail
-    if (feedbackGain) {
-      feedbackGain.gain.setValueAtTime(0, audioCtx.currentTime);
-      feedbackGain.gain.setValueAtTime(0.25, audioCtx.currentTime + 0.5);
+    if (audioEl) {
+      try { audioEl.pause(); } catch (e) { /* ignore */ }
     }
-    for (const node of musicNodes) {
-      try { node.stop(); } catch (e) { /* already stopped */ }
-    }
-    musicNodes = [];
   }
 
   function nextSong() {
-    const wasPlaying = musicPlaying;
-    stopMusic();
-    currentSongIndex = (currentSongIndex + 1) % SONGS.length;
-    if (wasPlaying) {
-      startMusic();
+    if (silenceTimerId) {
+      clearTimeout(silenceTimerId);
+      silenceTimerId = null;
     }
-    return SONGS[currentSongIndex].name;
+    playlistIndex = (playlistIndex + 1) % PLAYLIST.length;
+    if (musicPlaying) {
+      playCurrentTrack();
+    }
+    return PLAYLIST[playlistIndex].name;
   }
 
   function getCurrentSongName() {
-    return SONGS[currentSongIndex].name;
+    return PLAYLIST[playlistIndex].name;
   }
 
   function toggle() {

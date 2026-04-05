@@ -1,19 +1,30 @@
-/* Soviet Tetris - Style Sheet */
+/* Soviet Tetris - Vintage Cardboard Edition */
 
 :root {
-  /* Primary Soviet palette */
-  --color-bg:           #1a1a0e;
-  --color-bg-panel:     #2a2a1e;
-  --color-border:       #8b7355;
-  --color-border-light: #c4a668;
-  --color-text:         #c4a668;
-  --color-text-bright:  #e8d5a3;
-  --color-red:          #cc3333;
+  /* Cardboard / olive palette (matches reference image) */
+  --color-bg:           #1f2418;
+  --color-bg-deep:      #151912;
+  --color-panel:        #3a3d2a;
+  --color-panel-light:  #4a4d36;
+  --color-frame:        #a8412a;
+  --color-frame-dark:   #6e2818;
+  --color-border:       #7a7268;
+  --color-border-light: #b0a89e;
+  --color-text:         #b0a89e;
+  --color-text-bright:  #ece8e0;
+  --color-text-ru:      #d0cac0;
+  --color-red:          #c73a2a;
+  --color-red-bright:   #e04a34;
   --color-red-dark:     #8b1a1a;
   --color-star:         #cc3333;
+  --color-lcd:          #9fb085;
+  --color-lcd-dark:     #6b7a58;
+  --color-wood:         #c9a579;
+  --color-wood-dark:    #8a6d43;
+  --color-wood-shadow:  #4a3820;
 
   /* UI colors */
-  --color-grid-line:    #2a2a1e;
+  --color-grid-line:    rgba(196, 166, 104, 0.08);
   --color-ghost:        rgba(200, 200, 200, 0.2);
   --color-ghost-border: rgba(200, 200, 200, 0.5);
 }
@@ -29,101 +40,123 @@ html, body {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background-color: var(--color-bg);
+  background-color: var(--color-bg-deep);
   color: var(--color-text);
   font-family: 'Courier New', Courier, 'Lucida Console', monospace;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
   text-transform: uppercase;
 }
 
-/* Main Layout */
+/* Main Layout - cardboard paper texture background */
 .game-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
   height: 100vh;
   height: 100svh;
   max-height: 100vh;
   max-height: 100svh;
   overflow: hidden;
-  padding: 10px;
+  padding: 8px;
   padding-bottom: env(safe-area-inset-bottom, 0px);
-  background:
+  background-color: var(--color-bg);
+  background-image:
+    /* dark edge vignette */
+    radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.55) 100%),
+    /* subtle paper grain - fine diagonal */
     repeating-linear-gradient(
       45deg,
-      transparent,
-      transparent 19px,
-      rgba(200, 180, 120, 0.03) 19px,
-      rgba(200, 180, 120, 0.03) 20px
+      transparent 0,
+      transparent 2px,
+      rgba(255, 240, 200, 0.012) 2px,
+      rgba(255, 240, 200, 0.012) 3px
+    ),
+    /* cross grain */
+    repeating-linear-gradient(
+      -45deg,
+      transparent 0,
+      transparent 3px,
+      rgba(0, 0, 0, 0.04) 3px,
+      rgba(0, 0, 0, 0.04) 4px
+    ),
+    /* horizontal fibers */
+    repeating-linear-gradient(
+      0deg,
+      transparent 0,
+      transparent 40px,
+      rgba(0,0,0,0.025) 40px,
+      rgba(0,0,0,0.025) 41px
     );
-}
-
-/* Title Bar */
-.game-header {
-  text-align: center;
-  padding: 8px 0;
-  margin-bottom: 8px;
-}
-
-.game-header__title {
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: var(--color-red);
-  text-shadow: 0 0 20px rgba(204, 51, 51, 0.5);
-}
-
-.game-header__star {
-  color: var(--color-star);
-  font-size: 1.2rem;
 }
 
 /* Main Game Area */
 .game-main {
   display: flex;
-  gap: 16px;
-  align-items: flex-start;
+  gap: 10px;
+  align-items: stretch;
+  flex: 1;
+  min-height: 0;
+  justify-content: center;
 }
 
-/* Playfield Wrapper */
+/* ================= Playfield ================= */
 .playfield-wrapper {
   position: relative;
-  border: 3px solid var(--color-red);
-  padding: 2px;
-  background: var(--color-bg);
+  padding: 6px;
+  background:
+    linear-gradient(180deg, #252c1c 0%, #1a2013 100%);
+  border: 3px solid var(--color-frame);
+  border-radius: 3px;
+  box-shadow:
+    inset 0 0 0 1px rgba(0,0,0,0.5),
+    inset 0 0 30px rgba(0,0,0,0.5),
+    0 2px 8px rgba(0,0,0,0.4);
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
 }
 
-.playfield-wrapper::after {
+.playfield-wrapper::before {
+  /* inner dark red frame outline */
   content: '';
   position: absolute;
-  top: 2px;
-  left: 2px;
-  right: 2px;
-  bottom: 2px;
-  border: 1px solid var(--color-border);
+  inset: 2px;
+  border: 1px solid var(--color-frame-dark);
+  border-radius: 2px;
   pointer-events: none;
+  z-index: 2;
 }
 
 #game-canvas {
   display: block;
-  background: var(--color-bg);
+  background:
+    /* graph paper grid */
+    linear-gradient(rgba(196,166,104,0.04) 1px, transparent 1px) 0 0 / 30px 30px,
+    linear-gradient(90deg, rgba(196,166,104,0.04) 1px, transparent 1px) 0 0 / 30px 30px,
+    /* darker background */
+    radial-gradient(ellipse at 50% 30%, #2a3020 0%, #1a2013 100%);
+  max-width: 100%;
+  max-height: 100%;
 }
 
-/* CRT scanline overlay */
+/* CRT scanline overlay (subtle paper overlay) */
 .scanline-overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 6px;
   pointer-events: none;
-  background: repeating-linear-gradient(
-    to bottom,
-    transparent 0px,
-    transparent 2px,
-    rgba(0, 0, 0, 0.08) 2px,
-    rgba(0, 0, 0, 0.08) 4px
-  );
+  z-index: 3;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0px,
+      transparent 3px,
+      rgba(0, 0, 0, 0.06) 3px,
+      rgba(0, 0, 0, 0.06) 4px
+    );
+  mix-blend-mode: multiply;
 }
 
 /* Decoration Panels */
@@ -136,72 +169,143 @@ html, body {
   border: 2px solid var(--color-border);
 }
 
-/* Score Panel */
+/* ================= Score Panel ================= */
 .score-panel {
-  background: var(--color-bg-panel);
-  border: 2px solid var(--color-border);
-  padding: 16px;
-  min-width: 180px;
+  background:
+    linear-gradient(180deg, #3f4330 0%, #323626 100%);
+  border: 3px solid var(--color-frame);
+  border-radius: 3px;
+  padding: 12px 14px;
+  min-width: 210px;
+  max-width: 260px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
+  position: relative;
+  box-shadow:
+    inset 0 0 0 1px rgba(0,0,0,0.4),
+    inset 0 0 40px rgba(0,0,0,0.25),
+    0 2px 8px rgba(0,0,0,0.4);
+}
+
+.score-panel::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border: 1px solid var(--color-frame-dark);
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+/* Big stylized "Tetris" title at top of panel */
+.score-panel__brand {
+  font-family: 'Arial Black', 'Helvetica', sans-serif;
+  font-weight: 900;
+  font-style: italic;
+  font-size: 2.6rem;
+  color: var(--color-red);
+  text-align: center;
+  letter-spacing: -1px;
+  text-transform: none;
+  line-height: 0.9;
+  margin-bottom: 4px;
+  text-shadow:
+    0 1px 0 var(--color-red-dark),
+    0 2px 0 rgba(0,0,0,0.4),
+    2px 3px 6px rgba(0,0,0,0.5);
+  transform: skewX(-6deg);
 }
 
 .score-panel__section {
   text-align: center;
+  padding: 2px 0;
 }
 
 .score-panel__label {
-  font-size: 0.75rem;
-  color: var(--color-text);
+  font-size: 0.7rem;
+  color: var(--color-text-ru);
   margin-bottom: 4px;
+  letter-spacing: 2px;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.score-panel__value {
-  font-size: 1.2rem;
+.score-panel__label-ru {
   color: var(--color-text-bright);
   font-weight: bold;
 }
 
-.score-panel__value--song {
-  font-size: 0.7rem;
-  color: var(--color-red);
-  letter-spacing: 1px;
+.score-panel__label-sep {
+  color: var(--color-border);
+  font-weight: normal;
+  opacity: 0.6;
 }
 
-.score-panel__divider {
-  border: none;
-  border-top: 1px solid var(--color-border);
-  margin: 4px 0;
+.score-panel__label-en {
+  color: var(--color-text);
+  font-weight: normal;
+}
+
+.score-panel__value {
+  font-size: 1.25rem;
+  color: var(--color-text-bright);
+  font-weight: bold;
+  letter-spacing: 3px;
+  font-variant-numeric: tabular-nums;
+  padding: 4px 2px;
+}
+
+/* Digital display style - LCD segments look */
+.score-panel__value.digital {
+  font-family: 'Courier New', Courier, monospace;
+  color: var(--color-text-bright);
+  text-shadow: 0 0 6px rgba(232, 213, 163, 0.25);
+  font-size: 1.35rem;
+  letter-spacing: 6px;
+}
+
+.score-panel__value--song {
+  font-size: 0.75rem;
+  color: var(--color-red-bright);
+  letter-spacing: 1px;
+  text-shadow: 0 0 6px rgba(224, 74, 52, 0.3);
 }
 
 /* Next Piece Preview */
-.next-piece__label {
-  font-size: 0.75rem;
-  color: var(--color-text);
-  text-align: center;
-  margin-bottom: 8px;
-}
-
 .next-piece__canvas-wrapper {
   display: flex;
   justify-content: center;
+  margin-top: 4px;
 }
 
 #next-canvas {
-  background: var(--color-bg);
-  border: 1px solid var(--color-border);
+  background:
+    linear-gradient(180deg, #14180e 0%, #0c1008 100%);
+  border: 1px solid var(--color-frame-dark);
+  border-radius: 2px;
+  box-shadow:
+    inset 0 0 0 1px rgba(0,0,0,0.6),
+    inset 0 0 12px rgba(0,0,0,0.5);
+  max-width: 100%;
+  display: block;
 }
 
 /* Controls hint */
 .score-panel__controls {
-  font-size: 0.6rem;
+  font-size: 0.55rem;
   color: var(--color-border);
   text-align: center;
-  line-height: 1.6;
+  line-height: 1.8;
+  margin-top: auto;
+  padding-top: 8px;
+  letter-spacing: 1px;
+  opacity: 0.7;
 }
 
-/* Star decoration */
+/* Star decoration (kept for overlays) */
 .star-row {
   text-align: center;
   color: var(--color-star);
@@ -209,44 +313,51 @@ html, body {
   letter-spacing: 6px;
 }
 
-/* Title Screen Overlay */
+/* ================= Overlays ================= */
 .overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 6px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   z-index: 10;
+  border-radius: 2px;
 }
 
 .overlay--title {
-  background: var(--color-bg);
+  background: linear-gradient(180deg, #1a2013 0%, #14180e 100%);
 }
 
 .overlay--pause {
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.75);
 }
 
 .overlay--gameover {
-  background: rgba(139, 26, 26, 0.8);
+  background: rgba(139, 26, 26, 0.85);
 }
 
 .overlay__title {
-  font-size: 2.5rem;
-  font-weight: bold;
+  font-family: 'Arial Black', 'Helvetica', sans-serif;
+  font-weight: 900;
+  font-style: italic;
+  font-size: 2.8rem;
   color: var(--color-red);
-  text-shadow: 0 0 20px rgba(204, 51, 51, 0.5);
-  margin-bottom: 4px;
+  text-shadow:
+    0 1px 0 var(--color-red-dark),
+    0 2px 0 rgba(0,0,0,0.4),
+    2px 3px 10px rgba(0,0,0,0.6);
+  transform: skewX(-6deg);
+  margin-bottom: 6px;
+  text-transform: none;
+  letter-spacing: -1px;
 }
 
 .overlay__subtitle {
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: var(--color-text);
-  margin-bottom: 24px;
+  margin-bottom: 20px;
+  letter-spacing: 3px;
 }
 
 .overlay__text {
@@ -259,6 +370,7 @@ html, body {
   font-size: 0.85rem;
   color: var(--color-text);
   animation: blink 1s step-end infinite;
+  letter-spacing: 2px;
 }
 
 .overlay__level-select {
@@ -280,15 +392,22 @@ html, body {
   font-size: 1.3rem;
   color: var(--color-text-bright);
   margin-bottom: 16px;
+  letter-spacing: 2px;
 }
 
-/* Blink animation */
+.score-panel__divider {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 4px 0;
+  opacity: 0.4;
+}
+
+/* Animations */
 @keyframes blink {
   0%, 49% { opacity: 1; }
   50%, 100% { opacity: 0; }
 }
 
-/* Star pulse animation */
 @keyframes pulse {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.1); }
@@ -299,168 +418,278 @@ html, body {
   animation: pulse 2s ease-in-out infinite;
 }
 
-/* Hide elements by state */
 .hidden {
   display: none !important;
 }
 
-/* Responsive: Mobile */
+/* ================= Touch Controls ================= */
+.touch-controls {
+  width: 100%;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 12px;
+  padding-bottom: max(14px, env(safe-area-inset-bottom, 0px));
+  margin-top: 8px;
+  z-index: 100;
+  pointer-events: none;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  background:
+    /* paper grain */
+    repeating-linear-gradient(
+      45deg,
+      transparent 0,
+      transparent 2px,
+      rgba(0, 0, 0, 0.03) 2px,
+      rgba(0, 0, 0, 0.03) 3px),
+    linear-gradient(180deg, #4a4c36 0%, #35382a 60%, #24261b 100%);
+  border: 3px solid var(--color-frame);
+  border-radius: 4px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 230, 180, 0.08),
+    inset 0 0 0 1px rgba(0,0,0,0.5),
+    inset 0 0 40px rgba(0,0,0,0.4),
+    0 2px 8px rgba(0,0,0,0.4);
+  position: relative;
+}
+
+.touch-controls::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border: 1px solid var(--color-frame-dark);
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+/* Each side's 2x2 grid of buttons */
+.touch-controls__group {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 8px;
+  pointer-events: auto;
+  flex-shrink: 0;
+  padding: 2px;
+}
+
+/* Central decorative LCD screen */
+.touch-controls__lcd {
+  flex: 1 1 auto;
+  min-width: 60px;
+  max-width: 260px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  background:
+    linear-gradient(180deg, #2a2d1f 0%, #1e2016 100%);
+  border: 2px solid var(--color-frame-dark);
+  border-radius: 4px;
+  box-shadow:
+    inset 0 2px 4px rgba(0,0,0,0.6),
+    inset 0 -1px 2px rgba(0,0,0,0.4);
+}
+
+.touch-controls__lcd-screen {
+  width: 100%;
+  height: 100%;
+  min-height: 60px;
+  background:
+    /* horizontal LCD scan lines */
+    repeating-linear-gradient(
+      to bottom,
+      rgba(0,0,0,0.08) 0px,
+      rgba(0,0,0,0.08) 1px,
+      transparent 1px,
+      transparent 3px
+    ),
+    /* LCD glow */
+    radial-gradient(ellipse at 30% 40%, #b4c498 0%, #9fb085 40%, #7d8d66 100%);
+  border: 1px solid #4a5538;
+  border-radius: 2px;
+  box-shadow:
+    inset 0 0 8px rgba(0,0,0,0.3),
+    inset 0 0 0 1px rgba(255,255,255,0.08);
+}
+
+/* Industrial bakelite keypad button - dark plastic, high-contrast cream glyphs */
+.touch-controls__btn {
+  position: relative;
+  width: 58px;
+  height: 58px;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.7rem;
+  line-height: 1;
+  color: #f4d8a8;
+  background:
+    linear-gradient(180deg, #5a2a22 0%, #3a1810 55%, #260c08 100%);
+  border: 1px solid #0a0604;
+  border-radius: 8px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 200, 160, 0.22),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.7),
+    0 1px 0 #7a3828,
+    0 2px 0 #4a1e14,
+    0 4px 6px rgba(0, 0, 0, 0.55);
+  font-family: 'Arial', 'Helvetica', sans-serif;
+  font-weight: normal;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: transform 0.05s ease-out, box-shadow 0.05s ease-out;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  -webkit-font-smoothing: antialiased;
+}
+
+.touch-controls__btn:active,
+.touch-controls__btn--pressed {
+  transform: translateY(2px);
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.7),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.4),
+    0 0 0 rgba(0, 0, 0, 0),
+    0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Touch controls: cursor hint for desktop users */
+@media (hover: hover) and (pointer: fine) {
+  .touch-controls__btn {
+    cursor: pointer;
+  }
+  .touch-controls__btn:hover {
+    filter: brightness(1.08);
+  }
+}
+
+/* ================= Responsive: Mobile ================= */
 @media (max-width: 767px) {
+  .game-container {
+    padding: 6px;
+  }
+
   .game-main {
-    flex-direction: row;
-    align-items: flex-end;
     gap: 6px;
-    flex: 1;
-    min-height: 0;
+    align-items: stretch;
   }
 
   .playfield-wrapper {
-    flex-shrink: 1;
-    min-width: 0;
+    padding: 4px;
   }
 
   .score-panel {
-    flex-direction: column;
-    min-width: 70px;
-    max-width: 80px;
-    gap: 4px;
-    padding: 6px 4px;
-    flex-shrink: 0;
-    justify-content: flex-start;
-    font-size: 0.65rem;
+    min-width: 108px;
+    max-width: 130px;
+    padding: 8px 6px;
+    gap: 6px;
   }
 
-  .score-panel__section {
-    flex: 0;
-    min-width: auto;
+  .score-panel__brand {
+    font-size: 1.5rem;
+    margin-bottom: 2px;
   }
 
-  .score-panel__label,
-  .next-piece__label {
-    font-size: 0.55rem;
-    margin-bottom: 1px;
+  .score-panel__label {
+    font-size: 0.5rem;
+    letter-spacing: 1px;
+    gap: 2px;
+    margin-bottom: 2px;
   }
 
   .score-panel__value {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    padding: 2px 0;
+  }
+
+  .score-panel__value.digital {
+    font-size: 0.95rem;
+    letter-spacing: 3px;
   }
 
   .score-panel__value--song {
-    font-size: 0.5rem;
-  }
-
-  .score-panel__divider {
-    margin: 2px 0;
+    font-size: 0.55rem;
   }
 
   .score-panel__controls {
     display: none;
   }
 
-  .next-piece__canvas-wrapper canvas {
-    max-width: 56px;
-    max-height: 56px;
-  }
-
-  .star-row {
-    font-size: 0.6rem;
-    letter-spacing: 2px;
-  }
-
-  .game-header {
-    padding: 4px 0;
-    margin-bottom: 4px;
-  }
-
-  .game-header__title {
-    font-size: 1.1rem;
+  #next-canvas {
+    max-width: 100%;
   }
 
   .overlay__title {
-    font-size: 1.8rem;
+    font-size: 2rem;
+  }
+
+  .touch-controls__btn {
+    width: 50px;
+    height: 50px;
+    font-size: 1.45rem;
+    border-radius: 6px;
+  }
+
+  .touch-controls__group {
+    gap: 6px;
+  }
+
+  .touch-controls {
+    gap: 8px;
+    padding: 8px 6px;
+    padding-bottom: max(8px, env(safe-area-inset-bottom, 0px));
+  }
+
+  .touch-controls__lcd {
+    min-width: 50px;
+  }
+
+  .touch-controls__lcd-screen {
+    min-height: 50px;
   }
 }
 
-/* Responsive: Large screens */
-@media (min-width: 1200px) {
-  .game-header__title {
-    font-size: 2.2rem;
+/* Very small phones */
+@media (max-width: 380px) {
+  .touch-controls__btn {
+    width: 44px;
+    height: 44px;
+    font-size: 1.25rem;
+    border-radius: 5px;
+  }
+
+  .score-panel__brand {
+    font-size: 1.2rem;
   }
 
   .score-panel {
-    min-width: 200px;
+    min-width: 92px;
+    max-width: 110px;
+    padding: 6px 4px;
+  }
+}
+
+/* ================= Responsive: Large screens ================= */
+@media (min-width: 1200px) {
+  .score-panel {
+    min-width: 260px;
+    max-width: 300px;
+  }
+
+  .score-panel__brand {
+    font-size: 3.2rem;
   }
 
   .deco-panel {
     display: block;
   }
 }
-
-/* ===== Touch Controls ===== */
-.touch-controls {
-  width: 100%;
-  flex-shrink: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 6px;
-  padding: 10px 8px;
-  padding-bottom: max(10px, env(safe-area-inset-bottom, 0px));
-  z-index: 100;
-  pointer-events: none;
-  touch-action: none;
-  user-select: none;
-  -webkit-user-select: none;
-}
-
-.touch-controls__group {
-  display: flex;
-  gap: 6px;
-  pointer-events: auto;
-}
-
-.touch-controls__group--left {
-  align-items: center;
-}
-
-.touch-controls__group--right {
-  align-items: center;
-}
-
-.touch-controls__btn {
-  width: 48px;
-  height: 48px;
-  min-width: 0;
-  min-height: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.3rem;
-  border-radius: 10px;
-  background: rgba(139, 115, 85, 0.35);
-  border: 1.5px solid var(--color-border);
-  color: var(--color-text-bright);
-  touch-action: manipulation;
-  user-select: none;
-  -webkit-user-select: none;
-  transition: background 0.05s;
-}
-
-.touch-controls__btn--primary {
-  background: rgba(139, 115, 85, 0.5);
-  border-width: 2px;
-}
-
-.touch-controls__btn:active,
-.touch-controls__btn--pressed {
-  background: rgba(200, 170, 110, 0.6);
-  border-color: var(--color-text-bright);
-}
-
-/* Hide touch controls on mouse/desktop devices */
-@media (hover: hover) and (pointer: fine) {
-  .touch-controls {
-    display: none;
-  }
-}
-
