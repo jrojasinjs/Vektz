@@ -939,6 +939,7 @@ Tetris.Sound = (function() {
   let audioEl = null;
   let silenceTimerId = null;
   let playlistIndex = 0;
+  let onSongChangeCallback = null;
 
   function ensureAudioEl() {
     if (audioEl) return audioEl;
@@ -957,6 +958,7 @@ Tetris.Sound = (function() {
       silenceTimerId = null;
       if (!musicPlaying) return;
       playlistIndex = (playlistIndex + 1) % PLAYLIST.length;
+      if (onSongChangeCallback) onSongChangeCallback(PLAYLIST[playlistIndex].name);
       playCurrentTrack();
     }, SILENCE_MS);
   }
@@ -1000,6 +1002,26 @@ Tetris.Sound = (function() {
     return PLAYLIST[playlistIndex].name;
   }
 
+  function prevSong() {
+    if (silenceTimerId) {
+      clearTimeout(silenceTimerId);
+      silenceTimerId = null;
+    }
+    playlistIndex = (playlistIndex - 1 + PLAYLIST.length) % PLAYLIST.length;
+    if (musicPlaying) {
+      playCurrentTrack();
+    }
+    return PLAYLIST[playlistIndex].name;
+  }
+
+  /**
+   * Register a callback for automatic song changes
+   * @param {function} cb - Called with song name string
+   */
+  function onSongChange(cb) {
+    onSongChangeCallback = cb;
+  }
+
   function getCurrentSongName() {
     return PLAYLIST[playlistIndex].name;
   }
@@ -1026,6 +1048,8 @@ Tetris.Sound = (function() {
     startMusic,
     stopMusic,
     nextSong,
+    prevSong,
+    onSongChange,
     getCurrentSongName
   };
 })();

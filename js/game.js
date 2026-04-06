@@ -504,6 +504,31 @@ Tetris.Game = (function() {
     }
   }
 
+  function initSongSelector() {
+    const prevBtn = document.getElementById('song-prev');
+    const nextBtn = document.getElementById('song-next');
+
+    if (prevBtn) {
+      prevBtn.addEventListener('click', function() {
+        if (!soundInitialized) { Sound.init(); soundInitialized = true; }
+        Sound.prevSong();
+        updateSongDisplay();
+      });
+    }
+    if (nextBtn) {
+      nextBtn.addEventListener('click', function() {
+        if (!soundInitialized) { Sound.init(); soundInitialized = true; }
+        Sound.nextSong();
+        updateSongDisplay();
+      });
+    }
+
+    // Update display when song changes automatically (cyclic playback)
+    Sound.onSongChange(function() {
+      updateSongDisplay();
+    });
+  }
+
   // --- Overlay Management ---
 
   function showOverlay(name) {
@@ -534,6 +559,7 @@ Tetris.Game = (function() {
   document.addEventListener('DOMContentLoaded', function() {
     init();
     initDecorations();
+    initSongSelector();
     updateSongDisplay();
   });
 
