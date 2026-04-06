@@ -199,13 +199,12 @@ html, body {
 
 /* Big stylized "Tetris" title at top of panel */
 .score-panel__brand {
-  font-family: 'Arial Black', 'Helvetica', sans-serif;
-  font-weight: 900;
-  font-style: italic;
+  font-family: 'Ruslan Display', 'Arial Black', serif;
+  font-weight: 400;
   font-size: 2.6rem;
   color: var(--color-red);
   text-align: center;
-  letter-spacing: -1px;
+  letter-spacing: 1px;
   text-transform: none;
   line-height: 0.9;
   margin-bottom: 4px;
@@ -213,7 +212,6 @@ html, body {
     0 1px 0 var(--color-red-dark),
     0 2px 0 rgba(0,0,0,0.4),
     2px 3px 6px rgba(0,0,0,0.5);
-  transform: skewX(-6deg);
 }
 
 .score-panel__section {
@@ -344,6 +342,21 @@ html, body {
   opacity: 0.7;
 }
 
+/* Soviet art panel below controls */
+.score-panel__soviet-art {
+  display: flex;
+  justify-content: center;
+  margin-top: auto;
+  padding-top: 6px;
+}
+
+#soviet-canvas {
+  width: 100%;
+  max-width: 220px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
 /* Star decoration (kept for overlays) */
 .star-row {
   text-align: center;
@@ -377,19 +390,17 @@ html, body {
 }
 
 .overlay__title {
-  font-family: 'Arial Black', 'Helvetica', sans-serif;
-  font-weight: 900;
-  font-style: italic;
+  font-family: 'Ruslan Display', 'Arial Black', serif;
+  font-weight: 400;
   font-size: 2.8rem;
   color: var(--color-red);
   text-shadow:
     0 1px 0 var(--color-red-dark),
     0 2px 0 rgba(0,0,0,0.4),
     2px 3px 10px rgba(0,0,0,0.6);
-  transform: skewX(-6deg);
   margin-bottom: 6px;
   text-transform: none;
-  letter-spacing: -1px;
+  letter-spacing: 1px;
 }
 
 .overlay__subtitle {
@@ -539,15 +550,9 @@ html, body {
   width: 100%;
   height: 100%;
   min-height: 60px;
+  position: relative;
+  overflow: hidden;
   background:
-    /* horizontal LCD scan lines */
-    repeating-linear-gradient(
-      to bottom,
-      rgba(0,0,0,0.08) 0px,
-      rgba(0,0,0,0.08) 1px,
-      transparent 1px,
-      transparent 3px
-    ),
     /* LCD glow */
     radial-gradient(ellipse at 30% 40%, #b4c498 0%, #9fb085 40%, #7d8d66 100%);
   border: 1px solid #4a5538;
@@ -555,6 +560,32 @@ html, body {
   box-shadow:
     inset 0 0 8px rgba(0,0,0,0.3),
     inset 0 0 0 1px rgba(255,255,255,0.08);
+}
+
+/* LCD canvas - fills screen, scales with image-rendering crisp */
+.touch-controls__lcd-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* Scanline overlay on top of canvas */
+.touch-controls__lcd-screen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.06) 0px,
+      rgba(0, 0, 0, 0.06) 1px,
+      transparent 1px,
+      transparent 3px
+    );
 }
 
 /* Industrial bakelite keypad button - dark plastic, high-contrast cream glyphs */

@@ -53,10 +53,16 @@ Tetris.Touch = (function() {
     const rightGroup = document.createElement('div');
     rightGroup.className = 'touch-controls__group touch-controls__group--right';
 
-    // Central LCD display panel (decorative, matches reference image)
+    // Central LCD display panel with cossack dance animation
     const lcd = document.createElement('div');
     lcd.className = 'touch-controls__lcd';
-    lcd.innerHTML = '<div class="touch-controls__lcd-screen"></div>';
+    const lcdScreen = document.createElement('div');
+    lcdScreen.className = 'touch-controls__lcd-screen';
+    const lcdCanvas = document.createElement('canvas');
+    lcdCanvas.id = 'lcd-canvas';
+    lcdCanvas.className = 'touch-controls__lcd-canvas';
+    lcdScreen.appendChild(lcdCanvas);
+    lcd.appendChild(lcdScreen);
 
     for (const [action, label, group, slot] of BUTTONS) {
       const btn = document.createElement('div');

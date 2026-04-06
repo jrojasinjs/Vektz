@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>ТЕТРИС - Soviet Tetris</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Ruslan+Display&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -24,7 +27,7 @@
         <div id="title-overlay" class="overlay overlay--title">
           <div class="star-row star-pulse">★ ★ ★ ★ ★</div>
           <br>
-          <div class="overlay__title">TETRIS</div>
+          <div class="overlay__title">Тетрис</div>
           <div class="overlay__subtitle">SOVIET EDITION</div>
           <hr class="score-panel__divider" style="width: 60%; border-color: var(--color-border);">
           <br>
@@ -43,13 +46,13 @@
           <div class="overlay__title" style="color: var(--color-text-bright);">GAME OVER</div>
           <br>
           <div class="overlay__score">SCORE: <span id="final-score">0</span></div>
-          <div class="overlay__prompt">ENTER - NEW GAME</div>
+          <div class="overlay__prompt">TAP - NEW GAME</div>
         </div>
       </div>
 
       <!-- Score Panel -->
       <aside class="score-panel">
-        <div class="score-panel__brand">Tetris</div>
+        <div class="score-panel__brand">Тетрис</div>
 
         <div class="score-panel__section">
           <div class="score-panel__label">
@@ -106,6 +109,10 @@
           M - SOUND &nbsp; N - SONG &nbsp; P - PAUSE<br>
           ←→ MOVE &nbsp; ↑ ROTATE &nbsp; SPACE DROP
         </div>
+
+        <div class="score-panel__soviet-art">
+          <canvas id="soviet-canvas"></canvas>
+        </div>
       </aside>
 
       <!-- Right Decoration Panel -->
@@ -125,6 +132,8 @@
   <script src="js/renderer.js"></script>
   <script src="js/input.js"></script>
   <script src="js/touch.js"></script>
+  <script src="js/cossacks.js"></script>
+  <script src="js/soviet-art.js"></script>
   <script src="js/game.js"></script>
 </body>
 </html>

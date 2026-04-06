@@ -78,6 +78,11 @@ Tetris.Game = (function() {
       // TITLE and PAUSED just wait for input
     }
 
+    // Cossack dance runs always (decorative)
+    if (Tetris.Cossacks) {
+      Tetris.Cossacks.update(deltaTime);
+    }
+
     requestAnimationFrame(gameLoop);
   }
 
@@ -561,6 +566,12 @@ Tetris.Game = (function() {
     initDecorations();
     initSongSelector();
     updateSongDisplay();
+    if (Tetris.Cossacks) {
+      Tetris.Cossacks.init();
+    }
+    if (Tetris.SovietArt) {
+      Tetris.SovietArt.init();
+    }
   });
 
   return {
