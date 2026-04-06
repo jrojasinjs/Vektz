@@ -16,15 +16,17 @@ Tetris.Touch = (function() {
   // Button definitions: [action, label, group, slot]
   // slot positions within a 2x2 grid per side: tl, tr, bl, br
   // Using solid-fill glyphs for maximum clarity at small sizes
+  // VS15 (\uFE0E) forces text-style rendering on mobile (prevents color emoji)
+  const VS15 = '\uFE0E';
   const BUTTONS = [
-    ['hardDrop',  '\u2BEF',  'left',  'tl'], // ⯯
-    ['pause',     '\u23F8',  'left',  'tr'], // ⏸
-    ['moveLeft',  '\u25C0',  'left',  'bl'], // ◀
-    ['rotateCCW', '\u21BA',  'left',  'br'], // ↺
-    ['pause',     '\u23F8',  'right', 'tl'], // ⏸
-    ['hardDrop',  '\u2BEF',  'right', 'tr'], // ⯯
-    ['rotateCW',  '\u21BB',  'right', 'bl'], // ↻
-    ['moveRight', '\u25B6',  'right', 'br']  // ▶
+    ['hardDrop',  '\u2BEF' + VS15,  'left',  'tl'], // ⯯
+    ['pause',     '\u23F8' + VS15,  'left',  'tr'], // ⏸
+    ['moveLeft',  '\u25C0' + VS15,  'left',  'bl'], // ◀
+    ['rotateCCW', '\u21BA',         'left',  'br'], // ↺
+    ['pause',     '\u23F8' + VS15,  'right', 'tl'], // ⏸
+    ['hardDrop',  '\u2BEF' + VS15,  'right', 'tr'], // ⯯
+    ['rotateCW',  '\u21BB',         'right', 'bl'], // ↻
+    ['moveRight', '\u25B6' + VS15,  'right', 'br']  // ▶
   ];
 
   /**
