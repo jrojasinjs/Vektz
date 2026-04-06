@@ -19,13 +19,13 @@ Tetris.Touch = (function() {
   // VS15 (\uFE0E) forces text-style rendering on mobile (prevents color emoji)
   const VS15 = '\uFE0E';
   const BUTTONS = [
-    ['hardDrop',  '\u25BC\u25BC',    'left',  'tl'], // ▼▼
+    ['rotateCCW', '\u21BA',           'left',  'tl'], // ↺
     ['pause',     '\u23F8' + VS15,  'left',  'tr'], // ⏸
     ['moveLeft',  '\u25C0' + VS15,  'left',  'bl'], // ◀
-    ['rotateCCW', '\u21BA',         'left',  'br'], // ↺
+    ['hardDrop',  '\u25BD',          'left',  'br'], // ▽
     ['pause',     '\u23F8' + VS15,  'right', 'tl'], // ⏸
-    ['hardDrop',  '\u25BC\u25BC',    'right', 'tr'], // ▼▼
-    ['rotateCW',  '\u21BB',         'right', 'bl'], // ↻
+    ['rotateCW',  '\u21BB',         'right', 'tr'], // ↻
+    ['hardDrop',  '\u25BD',          'right', 'bl'], // ▽
     ['moveRight', '\u25B6' + VS15,  'right', 'br']  // ▶
   ];
 
@@ -61,10 +61,6 @@ Tetris.Touch = (function() {
     for (const [action, label, group, slot] of BUTTONS) {
       const btn = document.createElement('div');
       btn.className = 'touch-controls__btn touch-controls__btn--' + slot;
-      if (action === 'hardDrop') {
-        btn.style.fontSize = '1.1rem';
-        btn.style.letterSpacing = '-2px';
-      }
       btn.setAttribute('data-action', action);
       btn.textContent = label;
 
