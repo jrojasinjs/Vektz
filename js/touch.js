@@ -13,6 +13,12 @@ Tetris.Touch = (function() {
   // Actions that support DAS/ARR (hold to repeat)
   const DAS_ACTIONS = ['moveLeft', 'moveRight'];
 
+  // Hard drop / soft drop dual behavior
+  const HOLD_THRESHOLD = 180; // ms — hold longer = soft drop
+  let hardDropStartTime = 0;
+  let hardDropHeld = false;
+  let hardDropSoftTimer = 0;
+
   // Button definitions: [action, label, group, slot]
   // slot positions within a 2x2 grid per side: tl, tr, bl, br
   // Using solid-fill glyphs for maximum clarity at small sizes
@@ -160,6 +166,14 @@ Tetris.Touch = (function() {
     active[action] = true;
     e.currentTarget.classList.add('touch-controls__btn--pressed');
 
+    if (action === 'hardDrop') {
+      // Don't fire yet — wait for release (tap) or hold (soft drop)
+      hardDropStartTime = performance.now();
+      hardDropHeld = false;
+      hardDropSoftTimer = 0;
+      return;
+    }
+
     // Fire action immediately
     if (actionCallback) {
       actionCallback(action);
@@ -180,6 +194,20 @@ Tetris.Touch = (function() {
     const action = e.currentTarget.getAttribute('data-action');
     if (!action) return;
 
+    if (action === 'hardDrop') {
+      if (!hardDropHeld && actionCallback) {
+        // Quick tap — fire hard drop on release
+        actionCallback('hardDrop');
+      }
+      // If held, soft drop already handled — just stop
+      active[action] = false;
+      hardDropHeld = false;
+      hardDropStartTime = 0;
+      hardDropSoftTimer = 0;
+      e.currentTarget.classList.remove('touch-controls__btn--pressed');
+      return;
+    }
+
     active[action] = false;
     e.currentTarget.classList.remove('touch-controls__btn--pressed');
     delete dasTimers[action];
@@ -191,6 +219,26 @@ Tetris.Touch = (function() {
    * @param {number} deltaTime - Time since last frame in ms
    */
   function update(deltaTime) {
+    // Hard drop held → becomes soft drop
+    if (active['hardDrop'] && hardDropStartTime > 0) {
+      const elapsed = performance.now() - hardDropStartTime;
+      if (elapsed >= HOLD_THRESHOLD) {
+        if (!hardDropHeld) {
+          // Transition: first soft drop fire
+          hardDropHeld = true;
+          if (actionCallback) actionCallback('softDrop');
+          hardDropSoftTimer = C.ARR_DELAY;
+        } else {
+          // Repeat soft drops at ARR rate
+          hardDropSoftTimer -= deltaTime;
+          if (hardDropSoftTimer <= 0) {
+            if (actionCallback) actionCallback('softDrop');
+            hardDropSoftTimer += C.ARR_DELAY;
+          }
+        }
+      }
+    }
+
     for (const action of DAS_ACTIONS) {
       if (!active[action]) continue;
 
