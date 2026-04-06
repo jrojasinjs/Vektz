@@ -934,7 +934,7 @@ Tetris.Sound = (function() {
     { name: 'KATYUSHA',    src: 'assets/music/02-katyusha.mp3' },
     { name: 'KALINKA',     src: 'assets/music/03-kalinka.mp3' }
   ];
-  const SILENCE_MS = 5000;
+  const SILENCE_MS = 2000;
 
   let audioEl = null;
   let silenceTimerId = null;
